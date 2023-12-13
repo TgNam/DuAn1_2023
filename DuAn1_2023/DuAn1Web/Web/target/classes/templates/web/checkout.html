@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+
+<body>
+<main>
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Check Out</h4>
+                        <div class="breadcrumb__links">
+                            <a href="home.html">Home</a>
+                            <a href="./shop.html">Shop</a>
+                            <span>Thanh Toán</span>
+                        </div>
+                    </div>
+                    <div class="pt-2"  th:if="${exits == false}">
+                        <h1 style="color: red">Giỏ Hàng Trống</h1>
+                        <a href="/shop"><h2>Đi Mua Sắm</h2></a>
+                        <style>
+                            a:hover{
+                                color: black;
+                            }
+                        </style>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+    <!-- Checkout Section Begin -->
+    <section th:if="${exits}" class="checkout spad">
+        <div class="container">
+            <div class="checkout__form">
+                <form action="/user/checkout/order" method="post">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-6">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Địa chỉ giao hàng<span>*</span></p>
+                                        <input style="border: black 1px solid; color: black" name="address" required type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="checkout__order">
+                                <h4 class="order__title">Đơn hàng của bạn</h4>
+                                <div class="checkout__order__products">Product</div>
+                                <ul class="checkout__total__products">
+                                    <li th:each="item :${bill.billDetails}">
+                                        <p th:text="${item.productDetail.product.nameProduct}" ></p>
+                                    </li>
+                                </ul>
+                                <ul class="checkout__total__all">
+                                    <li>Subtotal <span class="price" th:text="${bill.totalCost}"></span></li>
+                                    <li>Total <span class="price" th:text="${bill.intoMoney}"></span></li>
+                                </ul>
+                                <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
+                                    ut labore et dolore magna aliqua.</p>
+                                <button type="submit" class="site-btn">PLACE ORDER</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- Checkout Section End -->
+</main>
+</body>
+
+</html>

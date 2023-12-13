@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.84.0">
+  <title>Login</title>
+  <!-- Bootstrap core CSS -->
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+    .error-message {
+      color: red;
+    }
+    a:hover{
+        color: black;
+    }
+    .checkout__input input{
+        color: black;
+        border: black 1px solid;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+  <!-- Custom styles for this template -->
+  <link href="/css/signin.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-12 col-md-6">
+            <div class="row">
+                <div class="col-12">
+                    <img style="width: 100%;" class="mb-4" src="https://levents.asia/wp-content/uploads/2023/10/levents_logo_black.png" alt="" >
+                    <h1 class="h1 mb-3 fw-normal text-center">Đăng Ký</h1>
+                    <span id="emailError" class="error-message d-block pt-2" style="height: 40px"></span>
+                </div>
+                <div class="col-12">
+                    <div class="checkout__input">
+                        <p>Họ Và Tên<span>*</span></p>
+                        <input class="input" type="text" id="name">
+                    </div>
+                </div>
+            </div>
+            <div class="checkout__input">
+                <p>Địa Chỉ<span>*</span></p>
+                <input id="address" type="text" placeholder="Địa chỉ" class="checkout__input__add input">
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="checkout__input">
+                        <p>Số Điện Thoại<span>*</span></p>
+                        <input class="input" id="phone" type="text">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="checkout__input">
+                        <p>Email<span>*</span></p>
+                        <input class="input" id="email" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="checkout__input">
+                <p>Mật Khẩu Đăng Nhập<span>*</span></p>
+                <input class="input" id="password" type="password">
+                <a href="/login">Bạn đã có tài khoản?</a>
+        </div>
+        <div class="12 d-flex justify-content-center">
+            <button onclick="handleSigin()" class="btn btn-lg btn-info" type="submit">Đăng Ký</button>
+        </div>
+    </div>
+</div>
+
+
+</body>
+ <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+ <script>
+   let handleSigin =()=>{
+     let  email = document.getElementById('email');
+     let password = document.getElementById('password');
+     let address = document.getElementById('address');
+     let name = document.getElementById('name');
+     let phone = document.getElementById('phone');
+     let inputs = document.querySelectorAll(".input");
+     let isValidate = true;
+
+     inputs.forEach(item=>{
+         if(!item.value){
+             document.getElementById('emailError').innerHTML = "Thiếu dữ liệu";
+             item.style.border =" red 1px solid";
+             isValidate = false;
+         }
+         item.oninput =()=>{
+             document.getElementById('emailError').innerHTML = "";
+             item.style.border =" black 1px solid";
+         }
+     })
+       if(!isValidate) return;
+
+       function isValidEmail(email) {
+           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+           return emailRegex.test(email);
+       }
+
+       function isValidPhoneNumber(phoneNumber) {
+           const phoneRegex = /^[0-9]{10}$/;
+           return phoneRegex.test(phoneNumber);
+       }
+
+     // Kiểm tra email
+     if (!isValidEmail(email.value)) {
+         document.getElementById('emailError').innerHTML = "Email không đúng định dạng";
+         isValidate = false;
+     }
+     // Kiểm tra phone
+     if (!isValidPhoneNumber(phone.value)) {
+         document.getElementById('emailError').innerHTML = "Số điện thoại không đúng định dạng!";
+         isValidate = false;
+     }
+
+     if(!isValidate) return;
+
+     let user = {
+         email : email.value,
+         password : password.value,
+         phone: phone.value,
+         name : name.value,
+         address: address.value,
+     }
+     $.ajax({
+           type: 'POST',
+           url: '/api/auth/sigin-handle',
+           data: JSON.stringify(user),
+           contentType: 'application/json',
+           dataType: 'json',
+           success: function(response) {
+               alert(response.message + "\n bạn có thể đăng nhập");
+           },
+           error: function(error) {
+               document.getElementById('emailError').innerHTML = JSON.parse(error.responseText).message;
+           }
+       });
+   }
+ </script>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.nice-select.min.js"></script>
+<script src="/js/jquery.nicescroll.min.js"></script>
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script src="/js/jquery.countdown.min.js"></script>
+<script src="/js/jquery.slicknav.js"></script>
+<script src="/js/mixitup.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/main.js"></script>
+</html>

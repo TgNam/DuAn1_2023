@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Male-Fashion | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+
+<body>
+<!--    &lt;!&ndash; Page Preloder &ndash;&gt;-->
+<!--    <div id="preloder">-->
+<!--        <div class="loader"></div>-->
+<!--    </div>-->
+
+<main>
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Cửa hàng</h4>
+                        <div class="breadcrumb__links">
+                            <a href="/home">Trang chủ</a>
+                            <span>Cửa hàng</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shop Section Begin -->
+    <section class="shop spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="shop__sidebar">
+                        <div class="shop__sidebar__search">
+                            <form action="/shop">
+                                <input name="name" type="text" placeholder="Search...">
+                                <button type="submit"><span class="icon_search"></span></button>
+                            </form>
+                        </div>
+                        <div class="shop__sidebar__accordion">
+                            <div class="accordion" id="accordionExample">
+                                <div style="margin-bottom: 25px ">
+                                    <div class="heading">
+                                        <a style="color: black; font-weight: bold" class="bold" href="/shop">Tất Cả</a>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseOne">Danh mục</a>
+                                    </div>
+                                    <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__categories">
+                                                <ul class="nice-scroll">
+                                                    <li th:each="category : ${listCategory}" > <a th:href="'?category='+${category.id}" th:text="${category.nameCategory}"> </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseFive">Colors</a>
+                                    </div>
+                                    <div id="collapseFive" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__size">
+                                                <th:block th:each="color, index : ${listColor}">
+                                                    <label th:class="'c-' + ${index.index + 1}" th:for="'sp-' + ${index.index + 1}">
+                                                        <span th:text="${color.nameColor}"></span>
+                                                        <input type="radio" th:id="'sp-' + ${index.index + 1}" th:value="${color.id}" onchange="location.href='?color=' + this.value">
+                                                    </label>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="shop__product__option">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="shop__product__option__left">
+                                    <p>Sản Phẩm</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="shop__product__option__right">
+                                    <p>Sắp xếp theo giá :</p>
+                                    <select id="sort">
+                                        <option value="1">Thấp đến cao</option>
+                                        <option value="2">Cao đến thấp</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row productList">
+
+                        <div class="col-lg-4 col-md-6 col-sm-6 wrapper_product" th:each="product, stat : ${listProduct}">
+                            <th:block th:replace="~{'/com/product' :: div }"></th:block>
+                        </div>
+                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-lg-12">-->
+<!--                            <div class="product__pagination">-->
+<!--                                <a th:if="${currentPage > 0}" th:href="'?pageNo=' + ${currentPage - 1}">&lt;&lt;</a>-->
+<!--                                <a th:if="${currentPage == 0}">&lt;&lt;</a>-->
+
+<!--                                &lt;!&ndash; Hiển thị 3 trang và dấu "..." khi có nhiều hơn &ndash;&gt;-->
+<!--                                <th:block th:with="startPage=${currentPage - 1 < 0 ? 0 : currentPage - 1}, endPage =${currentPage - 1 < 0 ? currentPage + 2 : currentPage + 1} ">-->
+<!--                                    <th:block th:each="i, loopStat : ${#numbers.sequence(startPage, endPage)}">-->
+<!--                                        <th:block th:if="${i >= 0 and i <= totalPage -1}">-->
+<!--                                            <a th:href="'?pageNo=' + ${i}" th:text="${i +1}" th:classappend="${currentPage == i ? 'active':''}"></a>-->
+<!--                                        </th:block>-->
+<!--                                    </th:block>-->
+<!--                                </th:block>-->
+<!--                                <th:block th:if="${(currentPage + 1) < (totalPage -1)}">-->
+<!--                                    <a th:href="'?pageNo=' + ${currentPage + 2 }">...</a>-->
+<!--                                </th:block>-->
+
+<!--                                <a th:if="${currentPage < totalPage -1}" th:href="'?pageNo=' + ${currentPage + 1}">&gt;&gt;</a>-->
+<!--                                <a th:if="${currentPage == totalPage -1}">&gt;&gt;</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shop Section End -->
+    <script>
+        let sort =(type)=>{
+            let products = document.querySelectorAll('.wrapper_product');
+
+            // Chuyển đổi danh sách sản phẩm thành một mảng để có thể sử dụng các phương thức mảng
+            let productsArray = Array.from(products);
+
+            // Sắp xếp mảng sản phẩm dựa trên giá từ thấp đến cao
+            productsArray.sort(function(a, b) {
+                let priceA = Number(extractNumberFromString(a.querySelector('.price').innerText));
+                let priceB = Number(extractNumberFromString(b.querySelector('.price').innerText));
+                if(type == 2) return priceB - priceA;
+                return priceA - priceB
+            });
+
+
+            // Xóa các sản phẩm đã tồn tại
+            products.forEach(function(product) {
+                product.remove();
+            });
+
+            // Thêm lại các sản phẩm đã được sắp xếp vào thứ tự mới
+            productsArray.forEach(function(product) {
+                document.querySelector(".productList").appendChild(product);
+            });
+        }
+        let selecterSort = document.querySelector("#sort");
+        selecterSort.onchange = () =>{
+            console.log(selecterSort.value);
+            sort(selecterSort.value);
+        }
+        function extractNumberFromString(inputString) {
+            // Sử dụng biểu thức chính quy để loại bỏ dấu chấm và kí tự "đ"
+            const cleanedString = inputString.replace(/[.,đ]/g, '');
+
+            // Chuyển chuỗi thành số
+            const number = parseFloat(cleanedString);
+
+            return number;
+        }
+    </script>
+</main>
+</body>
+
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<body>
+<main>
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Shopping Cart</h4>
+                        <div class="breadcrumb__links">
+                            <a href="home.html">Home</a>
+                            <a href="./shop.html">Shop</a>
+                            <span>Shopping Cart</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shopping Cart Section Begin -->
+    <section class="shopping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="shopping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody th:data-id="${cart.id}" class="body_table_cart">
+                                <tr th:each="item :${cart.billDetails}">
+                                    <td class="product__cart__item d-flex">
+                                        <div class="product__cart__item__pic" style="width: 100px; height: 100px">
+                                            <img th:src="'/api/products/' + ${item.productDetail.product.id} +'/image'" alt="">
+                                        </div>
+                                        <div class="product__cart__item__text">
+                                            <h6 th:text="${item.productDetail.product.nameProduct}"></h6>
+                                            <span th:text="${item.productDetail.color.nameColor} + ' x ' + ${item.productDetail.size.nameSize}"></span>
+                                            <h5 th:text="${item.priceNow}" class="price price-now"></h5>
+                                        </div>
+                                    </td>
+                                    <td class="quantity__item">
+                                        <div class="quantity">
+                                            <div class="pro-qty-2">
+                                                <input on="updateTotal()" oninput="updateTotal()" class="input-data input-quantity"
+                                                       th:data-id="${item.productDetail.id}"
+                                                       type="text"
+                                                       th:value="${item.quantityUrchased}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="cart__price price total"></td>
+                                    <td class="cart__close"><i class="fa fa-close"></i></td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn">
+                                <a href="/shop">Tiếp tục mua sắm</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn update__btn">
+                                <a style="cursor: pointer" ><i class="fa fa-spinner"></i> Cập nhật giỏ hàng</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="cart__discount">
+                        <h6>Mã Giảm Giá</h6>
+                        <form action="/user/add-voucher" method="post">
+                            <input name="voucher" type="text" placeholder="Nhập code" required>
+                            <button type="submit">Áp Dụng</button>
+                        </form>
+                        <div class="header__top__links"  th:if="${error}">
+                           <span style="color: red">Code không đúng hoặc hết hạn</span>
+                        </div>
+                    </div>
+                    <div class="cart__total">
+                        <h6>Số Tiền</h6>
+                        <ul>
+                            <li>Subtotal <span id="sale" th:data-voucher="${saleOf}" th:text="${cart.totalCost}" class="price" >00.00</span></li>
+                            <li>Total <span id="total-cost" th:text="${cart.intoMoney}" class="price">00.00</span></li>
+                        </ul>
+                        <a href="/user/checkout" class="primary-btn">Thanh toán ngay</a>
+                        <span class="pt-4 d-block" style="color: red">Nhớ cập nhật giỏ hàng trước khi thanh toán</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shopping Cart Section End -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        let closeBtns = document.querySelectorAll(".cart__close");
+        closeBtns.forEach(item =>{
+            item.onclick = () =>{
+                item.parentElement.remove()
+                updateTotal();
+            } ;
+        })
+        let updateBtn = document.querySelector(".update__btn");
+        updateBtn.onclick = () =>{
+            let data = getData();
+            $.ajax({
+                type: 'POST',
+                url: '/cart/update',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'text',
+                encode: true
+            })
+                .done(function (data) {
+                    alert("Success!")
+                    updateTotal();
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    // Xử lý lỗi
+                    if (jqXHR.status === 401) {
+                        // Lỗi 403 - Forbidden
+                        location.href = "/login";
+                    } else {
+                        // Xử lý các lỗi khác
+                        alert("Failed!");
+                    }
+                })
+        }
+        let getData =()=>{
+            let cart =document.querySelector(".body_table_cart")
+            let tr = cart.querySelectorAll("tr");
+            let cartId = cart.getAttribute("data-id");
+            let dataPost =[];
+            tr.forEach(item=>{
+                let input = item.querySelector(".input-data");
+                console.log(item);
+                let id = input.getAttribute("data-id");
+                let quantity = input.value;
+
+                let data = {
+                    id,
+                    quantity: quantity
+                }
+                dataPost.push(data);
+            })
+            return {
+                cartId,
+                data: dataPost,
+            }
+        }
+
+        let updateTotal = ()=> {
+            let cart = document.querySelector(".body_table_cart")
+            let tr = cart.querySelectorAll("tr");
+            let sale = document.querySelector("#sale");
+            let saleOf = Number(sale.getAttribute("data-voucher"));
+            let total = 0;
+            tr.forEach(item => {
+                let input = item.querySelector(".input-data");
+                let quantity = extractNumberFromString(input.value);
+                let price = extractNumberFromString(item.querySelector(".price-now").innerText);
+                console.log(price);
+                console.log(quantity);
+                let sum = formatCurrencyVND(String(Number(quantity) * Number(price)))
+                total += extractNumberFromString(sum);
+                item.querySelector(".total").innerText = sum;
+            })
+            let saleMoney = total - (total * (saleOf / 100));
+            console.log(document.querySelector("#total-cost"))
+            if (!isNaN(total)){
+                document.querySelector("#total-cost").innerText = formatCurrencyVND(saleMoney);
+                sale.innerText = formatCurrencyVND(total);
+            }
+            else{
+                document.querySelector("#total-cost").innerText = formatCurrencyVND("0");
+                sale.innerText = formatCurrencyVND("0");
+            }
+        }
+        $(document).ready(function() {
+            updateTotal();
+        });
+
+        function extractNumberFromString(inputString) {
+            const cleanedString = inputString.replace(/[.,đ]/g, '');
+
+            const number = parseFloat(cleanedString);
+
+            return number;
+        }
+        function formatCurrencyVND(amount) {
+            const formatter = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            });
+            return formatter.format(amount);
+        }
+    </script>
+</main>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+
+
+<body>
+
+<!-- Header Section Begin -->
+<header class="header">
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <!-- Offcanvas Menu End -->
+    <div class="header__top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-7">
+                    <div class="header__top__left">
+                        <p>Miễn phí vận chuyển, đảm bảo hoàn trả hoặc hoàn tiền trong 30 ngày.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-5">
+
+                    <div class="header__top__right">
+                        <div class="header__top__links"  th:if="${isLogin}">
+                            <a href="#" th:text="${userLogin.fullName}"></a>
+                            <a href="/logout">Đăng Xuất</a>
+                        </div>
+                        <div class="header__top__links" th:unless="${isLogin}">
+                            <a href="/login">Đăng nhập</a>
+                            <a href="/sigin">Đăng Ký</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3">
+                <div class="header__logo">
+                    <a href="/"><img src="/img/logo.png" alt=""></a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <nav class="header__menu mobile-menu">
+                    <ul>
+                        <li><a href="/">Trang chủ</a></li>
+                        <li><a href="/shop">Cửa hàng</a></li>
+                        <li><a href="/about">Trang</a>
+                            <ul class="dropdown">
+                                <li><a href="/about">About Us</a></li>
+                                <li><a href="/shop">Cửa hàng chi tiết</a></li>
+                                <li><a href="/shopping-cart">Giỏ hàng</a></li>
+                                <li><a href="/checkout">Thủ tục thanh toán</a></li>
+                                <li><a href="/blog-details">Blog chi tiết</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="/contact">Liên hệ</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <div class="header__nav__option">
+                    <a href="/user/shopping-cart"><img src="/img/icon/cart.png" alt=""> <span>0</span></a>
+                </div>
+            </div>
+        </div>
+        <div class="canvas__open"><i class="fa fa-bars"></i></div>
+    </div>
+</header>
+<!-- Header Section End -->
+</body>
+
+</html>

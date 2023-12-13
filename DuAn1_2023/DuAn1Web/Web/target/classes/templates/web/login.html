@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.84.0">
+  <title>Login</title>
+  <!-- Bootstrap core CSS -->
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+    .error-message {
+      color: red;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+  <!-- Custom styles for this template -->
+  <link href="/css/signin.css" rel="stylesheet">
+</head>
+<body>
+
+<main class="form-signin">
+    <img style="width: 100%;" class="mb-4" src="https://levents.asia/wp-content/uploads/2023/10/levents_logo_black.png" alt="" >
+    <h1 class="h3 mb-3 fw-normal text-center">Đăng Nhập</h1>
+    <span id="emailError" class="error-message d-block pt-2" style="height: 40px"></span>
+    <div class="form-floating">
+      <label for="email">Email</label>
+      <input  type="email" class="form-control" id="email" placeholder="Email">
+    </div>
+    <div class="form-floating pt-2">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password" placeholder="Password">
+    </div>
+    <a href="/sigin">Tạo tài khoản</a>
+    <button onclick="handleLogin()" class="w-100 btn btn-lg btn-primary" type="submit">Đăng Nhập</button>
+</main>
+</body>
+ <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+ <script>
+   let handleLogin =()=>{
+     let  email = document.getElementById('email');
+     let password = document.getElementById('password');
+     email.oninput=()=>{
+       document.getElementById('emailError').innerHTML ="";
+     }
+     password.oninput =()=>{
+       document.getElementById('emailError').innerHTML = "";
+     }
+     // Kiểm tra email
+     if (email.value === "") {
+       document.getElementById('emailError').innerHTML = "Email không được để trống";
+       return false;
+     }
+     // Kiểm tra password
+     if (password.value === "") {
+       document.getElementById('emailError').innerHTML = "Password không được để trống";
+       return false;
+     }
+     let user = {
+         email : email.value,
+         password : password.value,
+     }
+     $.ajax({
+           type: 'POST',
+           url: '/api/auth/login-handle',
+           data: JSON.stringify(user),
+           contentType: 'application/json',
+           dataType: 'text',
+           success: function(response) {
+               location.href = response;
+           },
+           error: function(error) {
+               document.getElementById('emailError').innerHTML = "Sai tài khoản hoặc mật khẩu!";
+           }
+       });
+   }
+ </script>
+</html>
